@@ -83,7 +83,7 @@ WIKIPEDIA = {
     "Union Square (Timișoara)": "Union Square, Timișoara",
     "Old Town (Bucharest)": "Lipscani",
     "Arch of Triumph (Bucharest)": "Arcul de Triumf",
-    "Bârsana Monastery": "Bârsana",
+    "Bârsana Monastery": "Bârsana Monastery",
     "Wooden Church of Ieud": "Ieud Hill Church",
     "St. Michael's Church (Cluj-Napoca)": "St. Michael's Church, Cluj-Napoca",
     "People's Salvation Cathedral": "National Cathedral of Romania",
@@ -102,6 +102,7 @@ WIKIPEDIA = {
 
 # Commons photo for sights whose article has no lead image (or a poor one)
 COMMONS_FILES = {
+    "Bârsana Monastery": "Overview of Bârsana monastery, Bârsana, 2017.jpg",
     "Făgăraș Fortress": "Cetatea Fagaras dinafara.jpg",
     "Black Church": "Biserica Neagra, Brasov, Romania.jpg",
     "Large Square (Sibiu)": "2023 Piata Mare din Sibiu.jpg",

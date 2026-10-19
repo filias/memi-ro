@@ -49,6 +49,7 @@ FOOD = [
 WIKIPEDIA = {
     "Mici": "Mititei",
     "Tocăniță": "Tocană",
+    "Bulz": "Bulz (food)",
     "Sarmale": "Stuffed leaves",
     "Mămăligă": "Mămăligă",
     "Ciorbă de burtă": "Tripe soup",
