@@ -7,6 +7,9 @@ Live at [ro.memi.games](https://ro.memi.games) (not deployed yet)
 ## Categories
 
 - **Geography: counties** — the 41 Romanian counties and Bucharest, as locator maps
+- **Geography: cities** — 52 cities and towns, tagged with their historical region
+- **Culture: sights** — 64 castles, fortresses, monasteries, ancient sites and natural wonders
+- **Culture: food** — 37 Romanian dishes, cheeses, sweets and drinks
 
 ## Setup
 
