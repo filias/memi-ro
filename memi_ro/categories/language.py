@@ -1,5 +1,8 @@
 """Everyday Romanian: about 20 useful words and phrases."""
 
+import re
+import unicodedata
+
 PHRASES = {
     "hello": "bună ziua",
     "hi": "salut",
@@ -59,3 +62,34 @@ PHRASE_NOTES = {
 
 # The same phrases keyed by their Romanian, for the Romanian → English direction.
 ENGLISH = {romanian: english for english, romanian in PHRASES.items()}
+
+# Native recordings on Wikimedia Commons, from Lingua Libre. Speakers and
+# licences are in static/audio/CREDITS.md; phrases missing here use the
+# browser's voice.
+RECORDINGS = {
+    "bună ziua": "LL-Q7913 (ron)-Andreea Teodoraa-bună ziua.wav",
+    "salut": "LL-Q7913 (ron)-Andreea Teodoraa-salut.wav",
+    "bună dimineața": "LL-Q7913 (ron)-Andreea Teodoraa-bună dimineața.wav",
+    "bună seara": "LL-Q7913 (ron)-Andreea Teodoraa-bună seara.wav",
+    "noapte bună": "LL-Q7913 (ron)-Andreea Teodoraa-noapte bună.wav",
+    "la revedere": "LL-Q7913 (ron)-Andreea Teodoraa-la revedere.wav",
+    "mulțumesc": "LL-Q7913 (ron)-Papaeta-mulțumesc.wav",
+    "cu plăcere": "LL-Q7913 (ron)-Andreea Teodoraa-cu plăcere.wav",
+    "da": "LL-Q7913 (ron)-Andreea Teodoraa-da.wav",
+    "nu": "LL-Q7913 (ron)-Andreea Teodoraa-nu.wav",
+    "scuzați-mă": "LL-Q7913 (ron)-Andreea Teodoraa-scuzați-mă.wav",
+    "noroc!": "LL-Q7913 (ron)-Andreea Teodoraa-noroc.wav",
+    "ajutor!": "LL-Q7913 (ron)-Andreea Teodoraa-ajutor.wav",
+    "apă": "LL-Q7913 (ron)-Andreea Teodoraa-apă.wav",
+    "bere": "LL-Q7913 (ron)-Andreea Teodoraa-bere.wav",
+    "vin": "LL-Q7913 (ron)-Andreea Teodoraa-vin.wav",
+    "prieten": "LL-Q7913 (ron)-Andreea Teodoraa-prieten.wav",
+    "dragoste": "LL-Q7913 (ron)-Andreea Teodoraa-dragoste.wav",
+}
+
+
+def phrase_slug(romanian):
+    """``"ce mai faci?"`` -> ``"ce-mai-faci"`` (recording filename)."""
+    folded = unicodedata.normalize("NFKD", romanian)
+    ascii_text = folded.encode("ascii", "ignore").decode().lower()
+    return "-".join(re.findall(r"[a-z0-9]+", ascii_text))

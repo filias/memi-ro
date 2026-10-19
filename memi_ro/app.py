@@ -65,6 +65,15 @@ config = MemiConfig(
         richly than words and are easier to recall later.</p>
         <p>Short, frequent sessions work better than long ones &mdash; the
         <em>spacing effect</em>. A few minutes a day is enough.</p>
+
+        <h2>Credits</h2>
+        <p>Images and descriptions from Wikipedia and Wikimedia Commons, under
+        their Creative Commons licences. Romanian recordings by native
+        speakers for <a href="https://lingualibre.org">Lingua Libre</a>
+        (CC BY-SA 4.0 / CC0; speakers listed in
+        <a href="https://github.com/filias/memi-ro/blob/main/static/audio/CREDITS.md">CREDITS.md</a>).
+        Maps &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>
+        contributors.</p>
     """,
     done_html="""
         <svg width="200" height="180" viewBox="0 0 80 72" xmlns="http://www.w3.org/2000/svg">

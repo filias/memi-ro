@@ -1,6 +1,7 @@
 """Romanian category providers."""
 
 import base64
+from pathlib import Path
 from urllib.parse import quote
 
 from memi_engine import CategoryProvider, ScientificNameProvider, images, register
@@ -20,7 +21,7 @@ from memi_ro.categories.food import (
     FOOD,
     WIKIPEDIA as FOOD_WIKI,
 )
-from memi_ro.categories.language import ENGLISH, PHRASE_NOTES, PHRASES
+from memi_ro.categories.language import ENGLISH, PHRASE_NOTES, PHRASES, phrase_slug
 from memi_ro.categories.nature import (
     ANIMAL_WIKIPEDIA,
     ANIMALS,
@@ -41,6 +42,8 @@ from memi_ro.categories.sights import (
     SIGHTS,
     WIKIPEDIA as SIGHT_WIKI,
 )
+
+AUDIO_DIR = Path(__file__).resolve().parent.parent.parent / "static" / "audio"
 
 # Romania. Wikidata coordinates outside it belong to something other than the
 # place on the card, so they get no map.
@@ -141,7 +144,7 @@ class PeopleBefore1859(PeopleProvider):
 
 
 class PeopleKingdom(PeopleProvider):
-    key = "people:1859–1947"
+    key = "people:monarchy 1859–1947"
     items = KINGDOM
 
 
@@ -216,8 +219,14 @@ class EnglishToRomanian(CategoryProvider):
         return {"text": f"Say: {say}\n\n{note}"}
 
     def get_audio(self, item):
-        # No recordings yet: the browser's Romanian voice says it.
-        return {"text": self.romanian(item), "lang": "ro-RO"}
+        """The Romanian, spoken: a native speaker's recording from
+        static/audio/<slug>.mp3 when there is one, else the browser's voice."""
+        romanian = self.romanian(item)
+        audio = {"text": romanian, "lang": "ro-RO"}
+        recording = AUDIO_DIR / f"{phrase_slug(romanian)}.mp3"
+        if recording.exists():
+            audio["src"] = f"/static/audio/{recording.name}"
+        return audio
 
 
 class RomanianToEnglish(EnglishToRomanian):
