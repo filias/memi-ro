@@ -6,7 +6,6 @@ from memi_engine import MemiConfig, create_app
 import memi_ro.providers  # noqa: F401
 
 config = MemiConfig(
-    default_category="geography:counties",
     # Details panel beside the card on reveal: the Wikipedia intro and, for
     # places, a map.
     layout="enriched",
