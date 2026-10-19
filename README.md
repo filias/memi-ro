@@ -10,6 +10,12 @@ Live at [ro.memi.games](https://ro.memi.games)
 - **Geography: cities** — 52 cities and towns, tagged with their historical region
 - **Culture: sights** — 64 castles, fortresses, monasteries, ancient sites and natural wonders
 - **Culture: food** — 37 Romanian dishes, cheeses, sweets and drinks
+- **People** — 77 famous Romanians in three eras: before 1859, 1859–1947 and since 1947
+- **Nature** — 38 animals and 25 plants, tagged with their scientific names
+- **Language** — 25 everyday phrases, in two directions: *romanian → english*
+  (listen, then name the English) and *english → romanian*. A speaker button
+  says the Romanian with the browser's voice; the details panel has how to say
+  it and when to use it.
 
 ## Setup
 

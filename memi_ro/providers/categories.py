@@ -1,6 +1,9 @@
 """Romanian category providers."""
 
-from memi_engine import CategoryProvider, images, register
+import base64
+from urllib.parse import quote
+
+from memi_engine import CategoryProvider, ScientificNameProvider, images, register
 
 from memi_ro.categories.cities import (
     CITIES,
@@ -16,6 +19,21 @@ from memi_ro.categories.food import (
     COMMONS_FILES as FOOD_FILES,
     FOOD,
     WIKIPEDIA as FOOD_WIKI,
+)
+from memi_ro.categories.language import ENGLISH, PHRASE_NOTES, PHRASES
+from memi_ro.categories.nature import (
+    ANIMAL_WIKIPEDIA,
+    ANIMALS,
+    PLANTS,
+    SCIENTIFIC_NAMES,
+)
+from memi_ro.categories.people import (
+    BEFORE_1859,
+    COMMONS_FILES as PEOPLE_FILES,
+    KINGDOM,
+    SINCE_1947,
+    TAGS as PEOPLE_TAGS,
+    WIKIPEDIA as PEOPLE_WIKI,
 )
 from memi_ro.categories.sights import (
     COMMONS_FILES as SIGHT_FILES,
@@ -100,7 +118,134 @@ class FoodProvider(CategoryProvider):
         return ("en", FOOD_WIKI.get(item, item))
 
 
+class PeopleProvider(CategoryProvider):
+    override_name = True
+
+    def get_image(self, item):
+        filename = PEOPLE_FILES.get(item)
+        if filename:
+            return images.get_commons_file_image(filename)
+        return images.get_wikipedia_image(PEOPLE_WIKI.get(item, item))
+
+    def get_tag(self, item):
+        return PEOPLE_TAGS.get(item)
+
+    def get_wikipedia_title(self, item):
+        # Commons portraits have no article link of their own.
+        return ("en", PEOPLE_WIKI.get(item, item))
+
+
+class PeopleBefore1859(PeopleProvider):
+    key = "people:before 1859"
+    items = BEFORE_1859
+
+
+class PeopleKingdom(PeopleProvider):
+    key = "people:1859–1947"
+    items = KINGDOM
+
+
+class PeopleSince1947(PeopleProvider):
+    key = "people:since 1947"
+    items = SINCE_1947
+
+
+class AnimalsProvider(ScientificNameProvider):
+    key = "nature:animals"
+    items = ANIMALS
+    override_name = True
+    scientific_names = SCIENTIFIC_NAMES
+
+    def get_image(self, item):
+        return images.get_wikipedia_image(ANIMAL_WIKIPEDIA.get(item, item))
+
+
+class PlantsProvider(ScientificNameProvider):
+    key = "nature:plants"
+    items = PLANTS
+    override_name = True
+    scientific_names = SCIENTIFIC_NAMES
+
+    def get_image(self, item):
+        # Plant articles mostly live under the scientific name (the common
+        # one is often a genus or a disambiguation page), but a few are the
+        # other way round, with the Latin name only a redirect.
+        result = images.get_wikipedia_image(SCIENTIFIC_NAMES[item])
+        if not result or not result.get("image"):
+            result = images.get_wikipedia_image(item)
+        return result
+
+
+def _text_card(text):
+    """Render a short phrase as an SVG data-URI to use as the card image."""
+    size = min(60, max(28, 780 // max(len(text), 1)))
+    safe = text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    svg = (
+        '<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" '
+        'viewBox="0 0 640 420">'
+        '<rect width="640" height="420" fill="#f7f5f0"/>'
+        f'<text x="320" y="140" text-anchor="middle" dominant-baseline="middle" '
+        f"font-family=\"Georgia, 'Times New Roman', serif\" font-size=\"{size}\" "
+        f'fill="#223344">{safe}</text>'
+        "</svg>"
+    )
+    b64 = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+    return "data:image/svg+xml;base64," + b64
+
+
+class EnglishToRomanian(CategoryProvider):
+    """Read the English, say the Romanian."""
+
+    key = "language:english → romanian"
+    light_bg = True
+    items = list(PHRASES)
+
+    def romanian(self, item):
+        return PHRASES[item]
+
+    def get_image(self, item):
+        romanian = self.romanian(item)
+        return {
+            "name": romanian,
+            "image": _text_card(item),
+            "url": f"https://en.wiktionary.org/wiki/{quote(romanian)}",
+        }
+
+    def get_details(self, item):
+        say, note = PHRASE_NOTES[self.romanian(item)]
+        return {"text": f"Say: {say}\n\n{note}"}
+
+    def get_audio(self, item):
+        # No recordings yet: the browser's Romanian voice says it.
+        return {"text": self.romanian(item), "lang": "ro-RO"}
+
+
+class RomanianToEnglish(EnglishToRomanian):
+    """The other way round: read the Romanian, name the English."""
+
+    key = "language:romanian → english"
+    items = list(ENGLISH)
+    submenu_default = True
+
+    def romanian(self, item):
+        return item
+
+    def get_image(self, item):
+        return {**super().get_image(item), "name": ENGLISH[item]}
+
+    def get_audio(self, item):
+        # Hearing the Romanian is part of the question here: listen, then answer.
+        return {**super().get_audio(item), "before_reveal": True}
+
+
 register(CountiesProvider())
 register(CitiesProvider())
 register(SightsProvider())
 register(FoodProvider())
+register(PeopleBefore1859())
+register(PeopleKingdom())
+register(PeopleSince1947())
+register(AnimalsProvider())
+register(PlantsProvider())
+register(RomanianToEnglish())
+register(EnglishToRomanian())
