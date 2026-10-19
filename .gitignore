@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+dist/
+.idea/
+.DS_Store
+reported_items.log
