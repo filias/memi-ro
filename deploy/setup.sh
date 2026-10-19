@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 # Run on the existing memi.click server (Caddy + uv + memi user already set up).
 # Usage: WEBHOOK_SECRET=xxxx bash setup.sh
+# On a rerun, leave WEBHOOK_SECRET unset to keep the secret already in
+# /etc/memi-ro-webhook.env (the one GitHub has).
 #
 # Safe to run against the already-deployed ro.memi.games: it pulls if the repo
 # is already cloned, and does not clobber a running game service on another port.
 set -euo pipefail
 
-: "${WEBHOOK_SECRET:?Set WEBHOOK_SECRET (the GitHub webhook secret) before running}"
+ENV_FILE=/etc/memi-ro-webhook.env
+if [ -z "${WEBHOOK_SECRET:-}" ] && [ ! -f "$ENV_FILE" ]; then
+    echo "Set WEBHOOK_SECRET (the GitHub webhook secret) before running" >&2
+    exit 1
+fi
 
 REPO=https://github.com/filias/memi-ro.git
 APP_DIR=/opt/memi-ro
@@ -30,12 +36,15 @@ if [ ! -f /etc/systemd/system/memi-ro.service ]; then
 fi
 
 # Webhook service + secret
-echo "WEBHOOK_SECRET=${WEBHOOK_SECRET}" > /etc/memi-ro-webhook.env
-chmod 600 /etc/memi-ro-webhook.env
+if [ -n "${WEBHOOK_SECRET:-}" ]; then
+    echo "WEBHOOK_SECRET=${WEBHOOK_SECRET}" > "$ENV_FILE"
+    chmod 600 "$ENV_FILE"
+fi
 cp deploy/memi-ro-webhook.service /etc/systemd/system/memi-ro-webhook.service
 
 systemctl daemon-reload
-systemctl enable --now memi-ro-webhook
+systemctl enable memi-ro-webhook
+systemctl restart memi-ro-webhook   # pick up a changed secret
 systemctl restart memi-ro   # pick up the code just pulled
 
 # Add the ro.memi.games block to Caddy if missing. If ro.memi.games is already
