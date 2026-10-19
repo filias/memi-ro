@@ -2,7 +2,7 @@
 
 A Romanian memory card game built on [memi-engine](https://github.com/filias/memi-engine).
 
-Live at [ro.memi.games](https://ro.memi.games) (not deployed yet)
+Live at [ro.memi.games](https://ro.memi.games)
 
 ## Categories
 
