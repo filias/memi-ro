@@ -5,21 +5,23 @@ from memi_engine import MemiConfig, create_app
 # Import providers to register them
 import memi_ro.providers  # noqa: F401
 
-# The home page's empty card shows Romania's outline in its flag instead of
+# The home page's empty card shows Romania's outline in its flag above
 # "pick a category". The engine has no setting for that, so this borrows
 # analytics_html (raw HTML at the bottom of every page, after app.js): while
-# the card still says "pick a category", swap the text for the flag map.
+# the card still says "pick a category", put the flag map above the text.
 # Loading a category replaces the card's text, so the map goes with it.
 # Flag map: Wikimedia Commons, "Flag map of Romania.svg", public domain.
 HOME_CARD_HTML = """
 <style>
-    #status .home-map { display: block; width: 80%; margin: 0 auto; }
+    #status.home { width: 100%; text-align: center; }
+    #status .home-map { display: block; width: 80%; margin: 0 auto 1.5rem; }
 </style>
 <script>
 (function () {
     var status = document.getElementById('status');
     if (status && status.textContent.trim() === 'pick a category') {
-        status.innerHTML = '<img class="home-map" src="/static/flag-map-romania.svg" alt="Romania">';
+        status.classList.add('home');
+        status.insertAdjacentHTML('afterbegin', '<img class="home-map" src="/static/flag-map-romania.svg" alt="Romania">');
     }
 })();
 </script>
