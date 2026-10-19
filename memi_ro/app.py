@@ -89,4 +89,4 @@ instance_static = os.path.join(os.path.dirname(__file__), "..", "static")
 app = create_app(config, instance_static=instance_static)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=8093)
+    app.run(debug=True, port=8110)

@@ -55,10 +55,10 @@ cat >> /etc/caddy/Caddyfile <<'EOF'
 
 ro.memi.games {
     handle /deploy {
-        reverse_proxy localhost:9016
+        reverse_proxy localhost:9110
     }
     handle {
-        reverse_proxy localhost:8093
+        reverse_proxy localhost:8110
     }
 }
 EOF
@@ -70,7 +70,7 @@ else
     echo ">> 'systemctl reload caddy':"
     echo ""
     echo "       handle /deploy {"
-    echo "           reverse_proxy localhost:9016"
+    echo "           reverse_proxy localhost:9110"
     echo "       }"
 fi
 

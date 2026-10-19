@@ -5,7 +5,7 @@ After=network.target
 [Service]
 User=memi
 WorkingDirectory=/opt/memi-ro
-ExecStart=/opt/memi-ro/.venv/bin/gunicorn memi_ro.app:app --bind 127.0.0.1:8093 --workers 2
+ExecStart=/opt/memi-ro/.venv/bin/gunicorn memi_ro.app:app --bind 127.0.0.1:8110 --workers 2
 Restart=always
 RestartSec=3
 
