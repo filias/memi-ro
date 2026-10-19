@@ -14,7 +14,7 @@ ROMANIA_BOUNDS = ((43.6, 48.3), (20.2, 29.8))
 
 
 class CountiesProvider(CategoryProvider):
-    key = "geografie:județe"
+    key = "geography:counties"
     items = COUNTIES
     override_name = True
     map_zoom = 8

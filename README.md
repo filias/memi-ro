@@ -1,4 +1,4 @@
-# memi românia
+# memi romania
 
 A Romanian memory card game built on [memi-engine](https://github.com/filias/memi-engine).
 
@@ -6,7 +6,7 @@ Live at [ro.memi.games](https://ro.memi.games) (not deployed yet)
 
 ## Categories
 
-- **Geografie: județe** — the 41 Romanian counties and Bucharest, as locator maps
+- **Geography: counties** — the 41 Romanian counties and Bucharest, as locator maps
 
 ## Setup
 
