@@ -144,7 +144,7 @@ class PeopleBefore1859(PeopleProvider):
 
 
 class PeopleKingdom(PeopleProvider):
-    key = "people:monarchy 1859–1947"
+    key = "people:monarchy 1859-1947"
     items = KINGDOM
 
 

@@ -116,8 +116,17 @@ config = MemiConfig(
 )
 
 import os
+from flask import redirect
+
 instance_static = os.path.join(os.path.dirname(__file__), "..", "static")
 app = create_app(config, instance_static=instance_static)
+
+
+# "monarchy 1859–1947" had an en dash, which the address dropped
+# (/monarchy-18591947); the hyphen gives /monarchy-1859-1947.
+@app.route("/monarchy-18591947")
+def old_monarchy_link():
+    return redirect("/monarchy-1859-1947", code=301)
 
 if __name__ == "__main__":
     app.run(debug=True, port=8110)
