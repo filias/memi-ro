@@ -12,6 +12,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 import requests
@@ -50,13 +51,24 @@ def file_info(filename):
     }
 
 
+def download(url):
+    """The file's bytes; Commons sometimes answers a burst of requests with an
+    error page instead, so wait and retry."""
+    for attempt in range(5):
+        resp = requests.get(url, headers=UA, timeout=60)
+        if resp.ok and resp.content[:4] == b"RIFF":
+            return resp.content
+        time.sleep(5 * (attempt + 1))
+    raise RuntimeError(f"could not download {url} (HTTP {resp.status_code})")
+
+
 def main():
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     credits = []
     for romanian, filename in RECORDINGS.items():
         info = file_info(filename)
         with tempfile.NamedTemporaryFile(suffix=".wav") as tmp:
-            tmp.write(requests.get(info["url"], headers=UA).content)
+            tmp.write(download(info["url"]))
             tmp.flush()
             out = AUDIO_DIR / f"{phrase_slug(romanian)}.mp3"
             subprocess.run(
