@@ -6,7 +6,7 @@ from memi_engine import MemiConfig, create_app
 import memi_ro.providers  # noqa: F401
 
 # The home page's empty card shows Romania's outline in its flag above
-# "pick a category". The engine has no setting for that, so this borrows
+# "pick a category". The engine has no setting for that, so this rides on
 # analytics_html (raw HTML at the bottom of every page, after app.js): while
 # the card still says "pick a category", put the flag map above the text.
 # Loading a category replaces the card's text, so the map goes with it.
@@ -35,7 +35,11 @@ config = MemiConfig(
     title="memi romania",
     subtitle="practise your memory of Romania",
     favicon_color="#002B7F",
-    analytics_html=HOME_CARD_HTML,
+    # GoatCounter (privacy-friendly, no cookies), memi-ro's own site.
+    analytics_html=(
+        '<script data-goatcounter="https://memi-ro.goatcounter.com/count"'
+        ' async src="//gc.zgo.at/count.js"></script>'
+    ) + HOME_CARD_HTML,
     sponsor_url="https://github.com/sponsors/filias",
     sponsor_text="sponsor",
     # The memi.games landing page, then every other public edition (memi
